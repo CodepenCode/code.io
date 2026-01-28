@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/homePageStyle.css">
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" /> -->
+    <link rel="stylesheet" href="http://dl.dropbox.com/s/xus8ttz5d0614bw/owl.carousel.min.css">
+    <link rel="stylesheet" href="http://dl.dropbox.com/s/73m8ht889g5z0mb/owl.theme.default.min.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    
+
+    <title>Home Page</title>
+</head>
+<style>
+    .select2-container {
+        flex: 1;
+    }
+
+    .select2-container--default .select2-selection--single {
+        border: none;
+        height: 36px;
+        padding-right: 35px;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 36px;
+        color: #111;
+    }
+
+    /* hide default arrow */
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        display: none;
+    }
+
+    /* custom arrow */
+    .select2-container--default .select2-selection--single::after {
+        content: "\f078";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: #333;
+        pointer-events: none;
+        transition: .2s;
+    }
+
+    /* rotate when open */
+    .select2-container--open .select2-selection--single::after {
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    /* placeholder */
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+        color: #999;
+    }
+
+    /* dropdown */
+    .select2-dropdown {
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 6px;
+        z-index: 9999;
+    }
+
+    .select2-results__option {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+
+    .select2-results__option--highlighted {
+        background: #ff3b3b !important;
+        color: #fff;
+    }
+
+    /* ========== BUTTON ========== */
+    .search-btn {
+        margin-top: 10px;
+        background: #ff3b3b;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+
+    <header class="hero">
+        <div class="overlay"></div>
+        <nav class="navbar mobile-nav-new">
+            <div class="logo"><a href="#"><img src="./images/logo_1.png" alt=""></a></div>
+            <div class="hamburger">☰</div>
+            <div class="menu">
+                <div class="links">
+                    <a href="#">How it works</a>
+                    <a href="#">Contact Us</a>
+                </div>
+                <a href="#" class="login">Login</a>
+            </div>
+            <div class="mobile-bottom">
+                <ul>
+                    <li><a href="#">HOW IT WORKS</a></li>
+                    <li><a href="#">CONTACT US</a></li>
+                    <li><a href="#">LOGIN</a></li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="desktop-nav-new">
+            <div class="left">
+                <div class="logo"><a href="#"><img src="./images/logo_1.png" alt=""></a></div>
+                <div class="links">
+                    <a href="#">How it works</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+            <div class="right">
+                <a href="#">Login</a>
+            </div>
+        </nav>
+        <div class="hero-content">
+            <h1>Discover Yourself, Discover the World</h1>
+            <p>Apply to your perfect volunteer, intern, or teach abroad program.</p>
+            <div class="search-box">
+                <div class="field">
+                    <label>Type</label>
+                    <select id="typeSelect">
+                        <option></option>
+                        <option>Volunteer Abroad</option>
+                        <option>Intern Abroad</option>
+                        <option>Teach Abroad</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Location</label>
+                    <div class="box two ui-widget">
+                        <input type="text" placeholder="Anywhere" name="Country" id="country">
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Activity</label>
+                    <select>
+                        <option>Anything</option>
+                    </select>
+                </div>
+                <button class="search-btn">Search</button>
+            </div>
+            <div class="search-table">
+                <div class="cell">
+                    <span class="label">Type</span>
+                    <div class="box">
+                        <select>
+                            <option>Volunteer Abroad</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cell">
+                    <span class="label">Location</span>
+                    <div class="box two ui-widget">
+                        <input type="text" placeholder="Anywhere" name="Country" id="country-1">
+                    </div>
+                </div>
+                <div class="cell">
+                    <span class="label">Activity</span>
+                    <div class="box">
+                        <select>
+                            <option>Anything</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="cell">
+                    <span class="label">&nbsp;</span>
+                    <div class="box searchbox four">
+                        <a href="#" class="search">Search</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="slider-main">
+        <h2>Trending Projects</h2>
+        <div class="slides owl-carousel">
+            <div class="slider">
+                <div class="slider-content">
+                    <div class="slider-img">
+                        <a href="#"><img src="./images/thumb01.jpg" alt=""></a>
+                    </div>
+                    <div class="content">
+                        <span>Costa Rica</span>
+                        <h3>MEDICAL SUPPORT IN QAPOS</h3>
+                        <h4>Global Volunteering International</h4>
+                        <p>12 people researching this project</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider">
+                <div class="slider-content">
+                    <div class="slider-img">
+                        <a href="#"><img src="./images/thumb02.jpg" alt=""></a>
+                    </div>
+                    <div class="content">
+                        <span>Peru</span>
+                        <h3>Volunteering</h3>
+                        <h4>Global Volunteering International</h4>
+                        <p>12 people researching this project</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider">
+                <div class="slider-content">
+                    <div class="slider-img">
+                        <a href="#"><img src="./images/thumb03.jpg" alt=""></a>
+                    </div>
+                    <div class="content">
+                        <span>Thailand</span>
+                        <h3>Teach English Abroad</h3>
+                        <h4>Global Volunteering International</h4>
+                        <p>12 people researching this project</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider">
+                <div class="slider-content">
+                    <div class="slider-img">
+                        <a href="#"><img src="./images/thumb04.jpg" alt=""></a>
+                    </div>
+                    <div class="content">
+                        <span>India</span>
+                        <h3>Dental Care Abroad</h3>
+                        <h4>Global Volunteering International</h4>
+                        <p>12 people researching this project</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slider">
+                <div class="slider-content">
+                    <div class="slider-img">
+                        <a href="#"><img src="./images/thumb01.jpg" alt=""></a>
+                    </div>
+                    <div class="content">
+                        <span>Costa Rica</span>
+                        <h3>MEDICAL SUPPORT IN QAPOS</h3>
+                        <h4>Global Volunteering International</h4>
+                        <p>12 people researching this project</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="future-slider future-main">
+        <h2>Future Destinations</h2>
+        <div class="future-slides owl-carousel">
+            <div class="future-slider future">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb10.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>KENYA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb11.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>TURKMENISTAN</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb12.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>SOUTH AFRICA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb13.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>BOLIVIA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb14.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>AFRICA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb15.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>INDIA</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="future-slider">
+                <div class="future-slider-content">
+                    <div class="future-slider-img">
+                        <a href="#"><img src="./images/thumb10.jpg" alt=""></a>
+                    </div>
+                    <div class="future-content">
+                        <p>37 Projects in</p>
+                        <h3>KENYA</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="affordable-slider affordable-main">
+        <h2>Most Affordable Projects</h2>
+        <div class="affordable-slides owl-carousel">
+            <div class="affordable-slider affordable">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb16.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Surf School for Children</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>South Africa</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+            <div class="affordable-slider">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb17.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Animal Care</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>Ghana</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+            <div class="affordable-slider">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb18.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Medical Support in Qapos</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>Costa Rice</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+            <div class="affordable-slider">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb19.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Teach English & French</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>Peru</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+            <div class="affordable-slider">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb20.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Build House Abroad</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>Kenya</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+            <div class="affordable-slider">
+                <div class="affordable-slider-content">
+                    <div class="affordable-slider-img">
+                        <a href="#"><img src="./images/thumb16.jpg" alt=""></a>
+                    </div>
+                    <div class="affordable-content">
+                        <p class="one">Starting at</p>
+                        <span>$299/week</span>
+                        <p class="two">for 4 Weeks</p>
+                        <p class="three">Surf School for Children</p>
+                    </div>
+                </div>
+                <div class="affordable-slide-below-content">
+                    <h3>South Africa</h3>
+                    <h4>Global Volunteering Information</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-main">
+            <div class="footer-left">
+                <a href="#"><img src="./images/logo_1.png" alt=""></a>
+            </div>
+            <div class="footer-right">
+                <div class="link-grp">
+                    <a href="#">FAQ</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://kit.fontawesome.com/a4218e0c32.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script> -->
+    <script src="http://dl.dropbox.com/s/7jaoqrmgyrk4scu/owl.carousel.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $('#typeSelect, #locationSelect, #activitySelect').select2({
+            minimumResultsForSearch: Infinity,  // hide search box
+            dropdownParent: $('body'),
+            width: '100%'
+        });
+
+        $('#typeSelect').select2({ placeholder: 'Volunteer Abroad', minimumResultsForSearch: Infinity, dropdownParent: $('body') });
+        $(function () {
+            var availableTags = [
+                "Afghanistan",
+                "Albania",
+                "Australia",
+                "Bangladesh",
+                "Bhutan",
+                "Brazil",
+                "Canada",
+                "Denmark",
+                "Egypt",
+                "France",
+                "Germany",
+                "India",
+                "Indonesia",
+                "Kenya",
+                "Malaysia",
+                "Nepal",
+                "Russia",
+                "Spain",
+                "Thailand",
+                "Vietnam",
+                "United Kingdom",
+                "United States of America"
+            ];
+            $("#country").autocomplete({
+                source: availableTags
+            });
+            $("#country-1").autocomplete({
+                source: availableTags
+            });
+        });
+
+
+        $(document).ready(function () {
+            $(".hamburger").click(function () {
+                $(".mobile-bottom").slideToggle(1500);
+            });
+        });
+        $('.slider-main .owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                481: {
+                    items: 2
+                },
+                992: {
+                    items: 4
+                }
+            }
+        });
+        $('.future-slider .owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 2
+                },
+                481: {
+                    items: 3
+                },
+                992: {
+                    items: 6
+                }
+            }
+        });
+        $('.affordable-slider .owl-carousel').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                481: {
+                    items: 3
+                },
+                992: {
+                    items: 5
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
