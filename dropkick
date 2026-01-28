@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hero Search Select2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+<!-- Select2 CSS -->
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Select2 JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<style>
+/* ========== PAGE ========== */
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#f2f2f2;
+}
+
+/* ========== HERO ========== */
+.hero{
+    min-height:100vh;
+    background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.hero-overlay{
+    background:rgba(0,0,0,.55);
+    padding:30px 18px;
+    border-radius:12px;
+    width:100%;
+    max-width:360px;
+    color:#fff;
+}
+
+.hero-overlay h1{
+    text-align:center;
+    margin-bottom:8px;
+}
+
+.hero-overlay p{
+    text-align:center;
+    font-size:14px;
+    opacity:.9;
+    margin-bottom:18px;
+}
+
+/* ========== SEARCH BOX ========== */
+.search-box{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.field{
+    display:flex;
+    align-items:center;
+    background:#fff;
+    border-radius:8px;
+    padding:6px 10px;
+}
+
+.field label{
+    font-size:13px;
+    color:#ff3b3b;
+    font-weight:600;
+    min-width:70px;
+}
+
+/* ========== SELECT2 ========== */
+.select2-container{
+    flex:1;
+}
+
+.select2-container--default .select2-selection--single{
+    border:none;
+    height:36px;
+    padding-right:35px;
+}
+
+.select2-container--default .select2-selection--single
+.select2-selection__rendered{
+    line-height:36px;
+    color:#111;
+}
+
+/* hide default arrow */
+.select2-container--default .select2-selection--single
+.select2-selection__arrow{
+    display:none;
+}
+
+/* custom arrow */
+.select2-container--default .select2-selection--single::after{
+    content:"\f078";
+    font-family:"Font Awesome 6 Free";
+    font-weight:900;
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:12px;
+    color:#333;
+    pointer-events:none;
+    transition:.2s;
+}
+
+/* rotate when open */
+.select2-container--open
+.select2-selection--single::after{
+    transform:translateY(-50%) rotate(180deg);
+}
+
+/* placeholder */
+.select2-container--default
+.select2-selection--single
+.select2-selection__placeholder{
+    color:#999;
+}
+
+/* dropdown */
+.select2-dropdown{
+    border-radius:8px;
+    overflow:hidden;
+    margin-top:6px;
+    z-index:9999;
+}
+
+.select2-results__option{
+    padding:10px 14px;
+    font-size:14px;
+}
+
+.select2-results__option--highlighted{
+    background:#ff3b3b !important;
+    color:#fff;
+}
+
+/* ========== BUTTON ========== */
+.search-btn{
+    margin-top:10px;
+    background:#ff3b3b;
+    color:#fff;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+/* ========== DESKTOP ========== */
+@media(min-width:768px){
+    .hero-overlay{
+        max-width:420px;
+        padding:35px 28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+    <div class="hero-overlay">
+        <h1>Discover Yourself,<br>Discover the World</h1>
+        <p>Apply to your perfect volunteer, intern, or teach abroad program.</p>
+
+        <div class="search-box">
+
+            <div class="field">
+                <label>Type</label>
+                <select id="typeSelect">
+                    <option></option>
+                    <option>Volunteer Abroad</option>
+                    <option>Intern Abroad</option>
+                    <option>Teach Abroad</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Location</label>
+                <select id="locationSelect">
+                    <option></option>
+                    <option>Anywhere</option>
+                    <option>India</option>
+                    <option>USA</option>
+                    <option>UK</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label>Activity</label>
+                <select id="activitySelect">
+                    <option></option>
+                    <option>Anything</option>
+                    <option>Teaching</option>
+                    <option>Healthcare</option>
+                    <option>Environment</option>
+                </select>
+            </div>
+
+            <button class="search-btn">Search</button>
+
+        </div>
+    </div>
+</section>
+
+<script>
+$('#typeSelect, #locationSelect, #activitySelect').select2({
+    minimumResultsForSearch: Infinity,  // hide search box
+    dropdownParent: $('body'),
+    width: '100%'
+});
+
+$('#typeSelect').select2({ placeholder:'Volunteer Abroad', minimumResultsForSearch: Infinity, dropdownParent:$('body') });
+$('#locationSelect').select2({ placeholder:'Anywhere', minimumResultsForSearch: Infinity, dropdownParent:$('body') });
+$('#activitySelect').select2({ placeholder:'Anything', minimumResultsForSearch: Infinity, dropdownParent:$('body') });
+</script>
+
+</body>
+</html>
