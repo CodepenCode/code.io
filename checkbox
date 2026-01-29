@@ -184,6 +184,9 @@
             width: 15%;
             margin-top: 25px;
         }
+        .br{
+            border-right: 1px solid lightgray ;
+        }
     }
 
     @media (min-width:1024px) {
@@ -207,9 +210,17 @@
         }
     }
 
+    @media(min-width:1536px) {
+        .slide-wrapper {
+            top: 156px;
+            height: 38%;
+        }
+    }
+
     @media(min-width:1920px) {
         .slide-wrapper {
-            top: 166px;
+            top: 183px;
+            height: 38%;
         }
 
         .filter-backdrop {
@@ -386,7 +397,7 @@
             <div class="container">
                 <div class="row g-4">
 
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-4 br">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-info">Start date (range)</span>
                             <span class="text-danger small" onclick="resetDate()">Reset</span>
@@ -460,7 +471,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-4">
+                    <div class="col-12 col-lg-4 br">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-info">Duration</span>
                             <span class="text-danger small" onclick="resetDuration()">Reset</span>
