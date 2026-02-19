@@ -1,106 +1,429 @@
+components ->
+DarkModeToggle
+import React from "react";
+import { Form } from "react-bootstrap";
+import { useTodos } from "../context/TodoContext";
+
+const DarkModeToggle = () => {
+  const { state, dispatch } = useTodos();
+
+  return (
+    <Form.Check
+      type="switch"
+      label={state.darkMode ? "Dark Mode" : "Light Mode"}
+      checked={state.darkMode}
+      onChange={() => dispatch({ type: "TOGGLE_DARK" })}
+    />
+  );
+};
+
+export default DarkModeToggle;
+
+TodoFilter
+import React from "react";
+import { Dropdown } from "react-bootstrap";
+import { useTodos } from "../context/TodoContext";
+
+const TodoFilter = () => {
+  const { state, dispatch } = useTodos();
+
+  const handleSelect = (filterType) => {
+    dispatch({ type: "SET_FILTER", payload: filterType });
+  };
+
+  const totalCount = state.todos.length;
+  const activeCount = state.todos.filter(todo => !todo.completed).length;
+  const completedCount = state.todos.filter(todo => todo.completed).length;
+
+  return (
+    <div className="d-flex justify-content-end mb-3">
+      <Dropdown>
+        <Dropdown.Toggle variant="outline-secondary" size="sm">
+          Filter: {state.filter}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => handleSelect("ALL")}>
+            All Tasks ({totalCount})
+          </Dropdown.Item>
+
+          <Dropdown.Item onClick={() => handleSelect("ACTIVE")}>
+            Active Tasks ({activeCount})
+          </Dropdown.Item>
+
+          <Dropdown.Item onClick={() => handleSelect("COMPLETED")}>
+            Completed Tasks ({completedCount})
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  );
+};
+
+export default TodoFilter;
+
+TodoInput
 import React, { useState } from "react";
-import "./App.css";
+import { Form, Button, Row, Col } from "react-bootstrap";
+import { useTodos } from "../context/TodoContext";
 
-function MoodThought() {
-  const [mood, setMood] = useState("");
-  const [thought, setThought] = useState("");
+const TodoInput = () => {
+  const [text, setText] = useState("");
+  const { dispatch } = useTodos();
 
-  const handleMoodChange = (e) => {
-    const selectedMood = e.target.value;
-    setMood(selectedMood);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!text.trim()) return;
 
-    if (selectedMood === "happy") {
-      setThought("Keep smiling! Happiness looks good on you");
-    } else if (selectedMood === "sad") {
-      setThought("It's okay to feel sad. Better days are coming");
-    } else if (selectedMood === "angry") {
-      setThought("Take a deep breath. Calm mind brings better decisions");
-    } else if (selectedMood === "motivated") {
-      setThought("Stay focused and never give up! You can do it");
-    } else {
-      setThought("");
-    }
+    dispatch({
+      type: "ADD_TODO",
+      payload: {
+        id: Date.now(),
+        text,
+        completed: false
+      }
+    });
+
+    setText("");
   };
 
   return (
-    <div className="container">
-      <h2 className="title">How Are You Feeling Today?</h2>
+    <Form onSubmit={handleSubmit} className="mb-3">
+      <Row>
+        <Col xs={9}>
+          <Form.Control
+            type="text"
+            placeholder="Enter new task..."
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+        </Col>
+        <Col xs={3}>
+          <Button type="submit" variant="primary" className="w-100">
+            Add
+          </Button>
+        </Col>
+      </Row>
+    </Form>
+  );
+};
 
-      <select value={mood} onChange={handleMoodChange} className="select-box">
-        <option value="">-- Select Your Mood --</option>
-        <option value="happy">Happy</option>
-        <option value="sad">Sad</option>
-        <option value="angry">Angry</option>
-        <option value="motivated">Motivated</option>
-      </select>
+export default TodoInput;
 
-      {thought && (
-        <p style={{ marginTop: "20px", fontWeight: "bold", color: "#333" }}>{thought}</p>
-      )}
+TodoItem
+import React, { useState } from "react";
+import { ListGroup, Button, Form } from "react-bootstrap";
+import { useTodos } from "../context/TodoContext";
+
+const TodoItem = ({ todo }) => {
+  const { dispatch } = useTodos();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.text);
+
+  const handleSave = () => {
+    if (!editText.trim()) return;
+
+    dispatch({
+      type: "EDIT_TODO",
+      payload: { id: todo.id, text: editText }
+    });
+
+    setIsEditing(false);
+  };
+
+  return (
+    <ListGroup.Item className="d-flex justify-content-between align-items-center">
+      
+      <div className="d-flex align-items-center gap-2">
+        
+        <Form.Check
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() =>
+            dispatch({ type: "TOGGLE_TODO", payload: todo.id })
+          }
+        />
+
+        {isEditing ? (
+          <Form.Control
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+          />
+        ) : (
+          <span
+            style={{
+              textDecoration: todo.completed ? "line-through" : "none"
+            }}
+          >
+            {todo.text}
+          </span>
+        )}
+      </div>
+
+      <div>
+        {isEditing ? (
+          <Button
+            size="sm"
+            variant="success"
+            onClick={handleSave}
+            className="me-2"
+          >
+            Save
+          </Button>
+        ) : (
+          <Button
+            size="sm"
+            variant="warning"
+            onClick={() => setIsEditing(true)}
+            className="me-2"
+          >
+            Edit
+          </Button>
+        )}
+
+        <Button
+          size="sm"
+          variant="danger"
+          onClick={() =>
+            dispatch({ type: "DELETE_TODO", payload: todo.id })
+          }
+        >
+          Delete
+        </Button>
+      </div>
+    </ListGroup.Item>
+  );
+};
+
+export default TodoItem;
+
+TodoList
+import React from "react";
+import { ListGroup } from "react-bootstrap";
+import { useTodos } from "../context/TodoContext";
+import TodoItem from "./TodoItem";
+
+const TodoList = () => {
+  const { state } = useTodos();
+
+  const filteredTodos = state.todos.filter(todo => {
+    if (state.filter === "ACTIVE") return !todo.completed;
+    if (state.filter === "COMPLETED") return todo.completed;
+    return true;
+  });
+
+  return (
+    <ListGroup>
+      {filteredTodos.map(todo => (
+        <TodoItem key={todo.id} todo={todo} />
+      ))}
+    </ListGroup>
+  );
+};
+
+export default TodoList;
+
+
+context ->TodoContext
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+
+const TodoContext = createContext();
+
+const initialState = {
+  todos: JSON.parse(localStorage.getItem("todos")) || [],
+  filter: "ALL",
+  darkMode: JSON.parse(localStorage.getItem("darkMode")) || false
+};
+
+function todoReducer(state, action) {
+  switch (action.type) {
+    case "ADD_TODO":
+      return {
+        ...state,
+        todos: [...state.todos, action.payload]
+      };
+
+    case "DELETE_TODO":
+      return {
+        ...state,
+        todos: state.todos.filter(todo => todo.id !== action.payload)
+      };
+
+    case "TOGGLE_TODO":
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload
+            ? { ...todo, completed: !todo.completed }
+            : todo
+        )
+      };
+
+    case "EDIT_TODO":
+      return {
+        ...state,
+        todos: state.todos.map(todo =>
+          todo.id === action.payload.id
+            ? { ...todo, text: action.payload.text }
+            : todo
+        )
+      };
+
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: action.payload
+      };
+
+    case "TOGGLE_DARK":
+      return {
+        ...state,
+        darkMode: !state.darkMode
+      };
+
+    default:
+      return state;
+  }
+}
+
+export const TodoProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(todoReducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(state.todos));
+  }, [state.todos]);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", JSON.stringify(state.darkMode));
+  }, [state.darkMode]);
+
+  return (
+    <TodoContext.Provider value={{ state, dispatch }}>
+      {children}
+    </TodoContext.Provider>
+  );
+};
+
+export const useTodos = () => useContext(TodoContext);
+
+app.css
+.light-mode {
+  background: #ffffffe9;
+  min-height: 100vh;
+  transition: 0.3s ease;
+}
+
+.dark-mode {
+  background: #333;
+  min-height: 100vh;
+  transition: 0.3s ease;
+}
+
+.dark-mode .card {
+  background-color: #2b2b2b;
+  color: white;
+}
+
+.dark-mode .list-group-item {
+  background-color: #787878;
+  color: white;
+  border-color: #444;
+}
+
+.dark-mode .form-control {
+  background-color: #444;
+  color: white;
+  border-color: #555;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #ccc;
+}
+
+.dropdown-toggle {
+  border-radius: 8px;
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.dropdown-toggle:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.dark-mode .dropdown-menu {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.dark-mode .dropdown-item {
+  color: #e2e8f0;
+}
+
+.dark-mode .dropdown-item:hover {
+  background-color: #334155;
+}
+
+@media (max-width: 576px) {
+  .card {
+    padding: 1.5rem !important;
+  }
+}
+
+app.jsx
+import React from "react";
+import { Container, Card } from "react-bootstrap";
+import TodoInput from "./components/TodoInput";
+import TodoList from "./components/TodoList";
+import TodoFilter from "./components/TodoFilter";
+import DarkModeToggle from "./components/DarkModeToggle";
+import { useTodos } from "./context/TodoContext";
+
+function App() {
+  const { state } = useTodos();
+
+  const filteredTodos = state.todos.filter((todo) => {
+    if (state.filter === "ACTIVE") return !todo.completed;
+    if (state.filter === "COMPLETED") return todo.completed;
+    return true;
+  });
+
+  return (
+    <div className={state.darkMode ? "dark-mode" : "light-mode"}>
+      <Container className="d-flex justify-content-center align-items-center min-vh-100 p-3">
+        <Card className="p-4 w-100 rounded-4 shadow-sm" style={{ maxWidth: "550px" }}>
+          <h2 className="text-center mb-2">Advanced Todo App</h2>
+
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <small className="text-muted">
+              {state.filter === "ALL" && `Total Tasks: ${filteredTodos.length}`}
+              {state.filter === "ACTIVE" && `Active Tasks: ${filteredTodos.length}`}
+              {state.filter === "COMPLETED" && `Completed Tasks: ${filteredTodos.length}`}
+            </small>
+
+            <DarkModeToggle />
+          </div>
+
+          <TodoInput />
+          <TodoFilter />
+          <TodoList />
+        </Card>
+      </Container>
     </div>
   );
 }
 
-export default MoodThought;
+export default App;
 
+main.jsx
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { TodoProvider } from "./context/TodoContext";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
-
-<div className="hobbies-title" onClick={() => setShowHobbies(!showHobbies)}>
-              <strong>{showHobbies ? "Hide Hobbies:" : "Show Hobbies:"}</strong>
-            </div>
-
-            <div className={`hobbies ${showHobbies ? "show" : "hide"}`}>
-              {user.hobbies.map((hobby, index) => (
-                <span key={index} className="hobby">
-                  {hobby}
-                </span>
-              ))}
-            </div>
-
-
-
-.container {
-  width: 400px;
-  margin: 100px auto;
-  padding: 30px;
-  text-align: center;
-  background: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-}
-
-.title {
-  margin-bottom: 20px;
-  color: #444;
-}
-
-.select-box {
-  width: 80%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-}
-
-.select-box:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.hobbies {
-  min-height: 60px;
-  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-}
-
-.hobbies.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.hobbies.hide {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <TodoProvider>
+    <App />
+  </TodoProvider>
+);
 
