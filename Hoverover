@@ -1,0 +1,67 @@
+import React, { useEffect, useRef } from "react";
+
+const InteractiveEyes = () => {
+  const eyesRef = useRef([]);
+
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      eyesRef.current.forEach((eye, index) => {
+        if (!eye) return;
+
+        const rect = eye.getBoundingClientRect();
+        const eyeCenterX = rect.left + rect.width / 2;
+        const eyeCenterY = rect.top + rect.height / 2;
+
+        const deltaX = event.clientX - eyeCenterX;
+        const deltaY = event.clientY - eyeCenterY;
+
+        const angleRad = Math.atan2(deltaY, deltaX);
+        let angleDeg = angleRad * (180 / Math.PI);
+
+        const strabismusOffset = 35;
+
+        if (index === 0) {
+          angleDeg += strabismusOffset;
+        } else {
+          angleDeg -= strabismusOffset;
+        }
+
+        eye.style.transform = `rotate(${angleDeg}deg)`;
+
+        const pupil = eye.querySelector(".pupil");
+        const moveX = Math.cos(angleRad) * 15;
+        const moveY = Math.sin(angleRad) * 15;
+
+        if (pupil) {
+          pupil.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        }
+      });
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  return (
+    <div className="eyes-container">
+      <div
+        className="interactive-eye"
+        ref={(el) => (eyesRef.current[0] = el)}
+      >
+        <div className="pupil"></div>
+      </div>
+
+      <div
+        className="interactive-eye"
+        ref={(el) => (eyesRef.current[1] = el)}
+      >
+        <div className="pupil"></div>
+      </div>
+    </div>
+  );
+};
+
+export default InteractiveEyes;
